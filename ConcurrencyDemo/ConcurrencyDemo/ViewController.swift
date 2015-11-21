@@ -21,6 +21,7 @@ class Downloader {
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
     @IBOutlet weak var imagView1: UIImageView!
     
     @IBOutlet weak var imageView2: UIImageView!
@@ -30,6 +31,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var imageView4: UIImageView!
     
     @IBOutlet weak var sliderValueLabel: UILabel!
+    
+    let queue = NSOperationQueue()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +46,8 @@ class ViewController: UIViewController {
 
     @IBAction func didClickOnStart(sender: AnyObject) {
         
-        let queue = NSOperationQueue()
+        self.cancelButton.enabled = true
+        
         let operation1 = NSBlockOperation(block: {
             let img1 = Downloader .downloadImageWithURL(imageURLs[0])
             NSOperationQueue.mainQueue().addOperationWithBlock({
@@ -51,7 +55,7 @@ class ViewController: UIViewController {
             })
         })
         operation1.completionBlock = {
-            print("Operation 1 completed")
+            print("Operation 1 completed, cancelled:\(operation1.cancelled) ")
         }
         queue.addOperation(operation1)
         
@@ -61,8 +65,9 @@ class ViewController: UIViewController {
                 self.imageView2.image = img2
             })
         })
+        operation2.addDependency(operation1)
         operation2.completionBlock = {
-            print("Operation 2 completed")
+            print("Operation 2 completed, cancelled:\(operation2.cancelled)")
         }
         queue.addOperation(operation2)
 
@@ -73,8 +78,9 @@ class ViewController: UIViewController {
                 self.imageView3.image = img3
             })
         })
+        operation3.addDependency(operation2)
         operation3.completionBlock = {
-            print("Operation 3 completed")
+            print("Operation 3 completed, cancelled:\(operation3.cancelled)")
         }
         queue.addOperation(operation3)
         
@@ -85,7 +91,7 @@ class ViewController: UIViewController {
             })
         })
         operation4.completionBlock = {
-            print("Operation 4 completed")
+            print("Operation 4 completed, cancelled:\(operation4.cancelled)")
         }
         queue.addOperation(operation4)
         
@@ -96,5 +102,9 @@ class ViewController: UIViewController {
         self.sliderValueLabel.text = "\(sender.value * 100.0)"
     }
 
+    @IBAction func didClickOnCancel(sender: AnyObject) {
+        
+        self.queue.cancelAllOperations()
+    }
 }
 

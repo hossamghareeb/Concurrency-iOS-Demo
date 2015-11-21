@@ -3,6 +3,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--Concurrency-->
@@ -78,13 +79,21 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Concurrency" id="740-DU-CFc">
-                        <barButtonItem key="rightBarButtonItem" title="Start" id="BUt-RJ-v1h">
-                            <connections>
-                                <action selector="didClickOnStart:" destination="BYZ-38-t0r" id="dbx-va-pcb"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem enabled="NO" systemItem="cancel" id="GJQ-jZ-9p4">
+                                <connections>
+                                    <action selector="didClickOnCancel:" destination="BYZ-38-t0r" id="jcU-w3-q9l"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Start" id="BUt-RJ-v1h">
+                                <connections>
+                                    <action selector="didClickOnStart:" destination="BYZ-38-t0r" id="dbx-va-pcb"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="cancelButton" destination="GJQ-jZ-9p4" id="xAY-sh-tE4"/>
                         <outlet property="imagView1" destination="S10-3H-623" id="x8o-Iu-uh6"/>
                         <outlet property="imageView2" destination="oat-JP-Eb3" id="y98-De-tE1"/>
                         <outlet property="imageView3" destination="Bv1-OJ-cm9" id="3hP-F3-Yhc"/>
